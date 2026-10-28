@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://apis.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com; frame-src https://*.firebaseapp.com https://accounts.google.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="theme-color" content="#f7f8f2">
+  <title>하루의 조각 — 나만의 일기장</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23394f40'/%3E%3Cpath d='M12 10h16v21l-8-4-8 4z' fill='%23f5f2dc'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./editor.mjs"></script>
+</head>
+<body>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v16h-6a3 3 0 0 0-2 1 3 3 0 0 0-2-1H4zM12 5v16"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="m15 5 4 4M4 20l5-1L20 8a3 3 0 0 0-4-4L5 15z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7M14 10v7"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C6 2 2 9 6 15s15 4 14-12ZM4 21 16 9"/></symbol>
+  </svg>
+  <a class="skip-link" href="#entry-title">본문으로 건너뛰기</a>
+  <header class="app-header">
+    <a class="brand" href="../" id="brand"><span class="brand-mark"><svg><use href="#i-book"/></svg></span><span>하루의 조각<small>나를 위한 작은 기록</small></span></a>
+    <div class="header-right"><div class="auth-bar"><span id="user-label" class="user-label"></span><button id="logout" hidden>로그아웃</button><a href="../" class="cloud-button">교실 서랍</a></div><span class="private-badge"><svg><use href="#i-lock"/></svg>나만의 일기장</span><span class="header-date" id="today-label"></span></div>
+  </header>
+  <section id="welcome" class="cloud-welcome"><p class="eyebrow">YOUR PRIVATE MOMENTS</p><h1>나의 하루를, 나의 계정에.</h1><p>Google 계정으로 로그인하고<br>여러 기기에서 나만의 일기를 이어 써요.</p><button id="login" class="primary" disabled>Google 계정으로 시작하기</button><p id="auth-status" role="status">로그인 설정을 확인하고 있어요…</p><p class="cloud-note">일기는 Google Firebase에 계정별로 저장해요.<br>기존 컴퓨터의 일기를 자동으로 가져오지 않아요.<br>공용 기기에서는 사용 후 로그아웃하고 브라우저를 닫아 주세요.</p></section><main class="shell" id="private-shell" hidden>
+    <section class="intro"><div><p class="eyebrow">A LITTLE MOMENT, JUST FOR YOU</p><h1>평범한 하루도, 소중한 한 페이지.</h1><p>잠시 멈춰 오늘의 마음을 남겨 보세요.</p></div><button id="new-entry" class="primary"><svg><use href="#i-plus"/></svg>새 일기 쓰기</button></section>
+    <div class="workspace">
+      <aside class="sidebar" aria-label="일기 탐색">
+        <section class="calendar-section" aria-label="날짜별 일기">
+          <div class="section-top"><h2>나의 기록</h2><button id="go-today" class="text-button">오늘</button></div>
+          <div class="month-nav"><h3 id="month-label"></h3><div><button id="prev-month" class="icon-button" aria-label="이전 달"><svg><use href="#i-left"/></svg></button><button id="next-month" class="icon-button" aria-label="다음 달"><svg><use href="#i-right"/></svg></button></div></div>
+          <div class="weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+          <div id="calendar" class="calendar"></div>
+          <p class="calendar-note"><span></span>기록이 있는 날</p>
+        </section>
+        <section class="entries-section" aria-label="일기 목록">
+          <label class="search-box"><svg><use href="#i-search"/></svg><input id="search" type="search" placeholder="기억하고 싶은 순간 검색" aria-label="제목과 본문 검색" maxlength="200"></label>
+          <div class="list-heading"><h3 id="list-label">모든 일기 <span id="entry-count">0</span></h3><button id="clear-filter" class="text-button" hidden>전체 보기</button></div>
+          <p id="list-status" class="list-status" role="status"></p>
+          <div id="entry-list" class="entry-list"></div><p class="cloud-note">검색과 달력은 불러온 기록을 기준으로 표시해요. 최근 200개부터 불러와요.</p><button class="cloud-button load-more" id="load-more" hidden>이전 기록 더 불러오기</button><button class="cloud-button load-more" id="refresh-entries">새로 불러오기</button>
+        </section>
+        <div class="sidebar-footer"><svg><use href="#i-lock"/></svg><span>내 Google 계정의 클라우드에 저장해요.</span></div>
+      </aside>
+      <section class="editor-card" aria-label="일기 작성">
+        <div class="editor-top"><span class="editor-label"><svg><use href="#i-pen"/></svg><span id="editor-mode">새로운 페이지</span></span><span id="save-state" role="status">아직 저장하지 않았어요</span></div>
+        <form id="entry-form">
+          <div class="entry-meta"><label class="date-field" for="entry-date">기록할 날짜<input id="entry-date" type="date" required min="0100-01-01" max="9999-12-31"></label><span class="weekday-label" id="weekday-label"></span></div>
+          <label for="entry-title" class="sr-only">일기 제목</label><input id="entry-title" class="title-input" placeholder="오늘은 어떤 하루였나요?" maxlength="200" autocomplete="off">
+          <fieldset class="mood-field"><legend>오늘의 마음 <span>지금의 기분을 골라 보세요</span></legend><div id="mood-options" class="mood-options"></div></fieldset>
+          <div class="writing-area"><label for="entry-body" class="sr-only">일기 내용</label><textarea id="entry-body" placeholder="작은 일도 좋아요. 오늘의 이야기를 자유롭게 적어 보세요.&#10;&#10;기억하고 싶은 순간, 스쳐 간 생각, 나에게 건네고 싶은 말…" required maxlength="100000"></textarea><div class="writing-footer"><span>있는 그대로의 나를 기록하는 시간</span><span id="char-count">0자</span></div></div>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+          <div class="editor-actions"><button type="button" id="delete-entry" class="delete-button" hidden><svg><use href="#i-trash"/></svg>삭제</button><span class="save-hint" id="save-hint">나의 하루를 차곡차곡.</span><button type="submit" id="save-entry" class="primary"><svg><use href="#i-check"/></svg><span>일기 저장하기</span></button></div>
+        </form>
+      </section>
+    </div>
+    <footer class="page-footer"><svg><use href="#i-leaf"/></svg>잘 쓴 글보다, 솔직한 마음이면 충분해요.</footer>
+  </main>
+  <div class="cloud-links"><button id="privacy-info">개인정보와 저장 방식</button><button id="export-entries" hidden>불러온 일기 내려받기</button></div>
+  <dialog id="privacy-dialog" class="privacy-dialog"><h2>일기를 저장하기 전에</h2><p>Google 로그인은 계정 식별에 필요한 이메일·이름·계정 ID를 Firebase Authentication에서 처리합니다. 이름과 이메일을 일기 문서에 복사하지 않아요.</p><p>일기 날짜·제목·본문·기분·생성 및 수정 시각은 Google Cloud Firestore에 로그인 사용자별 경로로 저장합니다. 다른 사용자에게 공개하는 기능은 없으며 광고·방문 분석 기능을 넣지 않았어요. 운영 권한이 있는 Firebase 프로젝트 관리자는 데이터에 접근할 수 있습니다. 종단간 암호화 서비스는 아닙니다.</p><p>브라우저에는 일기 오프라인 영구 저장을 사용하지 않습니다. 로그인 상태는 현재 탭 세션에서 유지합니다. 로그아웃 시 화면의 일기를 비우고 페이지를 다시 읽습니다. 내려받은 파일은 기기에 남으므로 직접 관리해 주세요.</p><p>기록은 직접 삭제할 때까지 보관됩니다. 각 일기의 삭제 버튼으로 지울 수 있으며, 계정 자체와 전체 데이터 삭제 요청은 프로젝트 운영자에게 문의하세요. 학생 개인정보나 민감한 제3자 정보를 기록하는 용도로 제공하지 않습니다.</p><button id="close-privacy" class="cloud-button">확인했어요</button></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

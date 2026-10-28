@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="theme-color" content="#326455"><meta name="description" content="나의 웹앱을 한곳에. 교실 도구, 학습과 놀이, 개인 기록을 모은 교실 서랍.">
+  <title>교실 서랍 · 나의 웹앱 허브</title><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div id="hub">
+  <aside class="sidebar">
+    <a class="brand" href="#home"><span class="brand-icon" data-icon="drawer"></span><span>교실 서랍<small>나의 작은 웹앱 모음집</small></span></a>
+    <p class="nav-label">MY WORKSPACE</p>
+    <nav aria-label="앱 분류">
+      <button class="nav-item active" data-category="all"><span data-icon="grid"></span>모든 웹앱<span class="nav-count" id="total-count">5</span></button>
+      <button class="nav-item" data-category="classroom"><span data-icon="timer"></span>교실 도구</button>
+      <button class="nav-item" data-category="learning"><span data-icon="message"></span>학습과 소통</button>
+      <button class="nav-item" data-category="play"><span data-icon="spark"></span>놀이와 활동</button>
+      <button class="nav-item" data-category="personal"><span data-icon="book"></span>개인 공간</button>
+      <span class="nav-divider"></span>
+      <button class="nav-item" id="favorites-nav"><span data-icon="star"></span>즐겨찾기</button>
+    </nav>
+    <div class="sidebar-note"><span data-icon="sprout"></span><strong>좋은 도구가 모이는 곳</strong><p>직접 만든 작은 도구들로<br>교실의 하루를 채워요.</p></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>기록은 각 앱에서 관리해요</div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span class="breadcrumb">내 작업 공간 <span>/</span> <strong>웹앱 모음집</strong></span><button class="button small" id="add-app"><span data-icon="plus"></span>웹앱 추가</button></header>
+    <main id="main">
+      <section class="intro"><div><span class="eyebrow">EVERYDAY, A LITTLE EASIER</span><h1>오늘도, 서랍을 열어요.</h1><p>내가 만든 웹앱들이 한자리에.<br class="mobile-break"> 필요한 순간, 가볍게 꺼내 쓰세요.</p></div><div class="date-card"><span id="today"></span><strong>작은 도구, 더 좋은 하루</strong></div></section>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy"><span class="pill"><span class="status-dot"></span>우리 교실에 새로 도착했어요</span><h2 id="hero-title">잘 쉬는 시간도,<br>배움의 한 조각.</h2><p>남은 시간은 한눈에, 마음은 여유롭게.<br>학생들과 함께 보는 쉬는시간 타이머를 만나보세요.</p><a class="button primary" href="#timer">타이머 열기 <span data-icon="arrow"></span></a><span class="hero-footnote">설치 없이 · 이름 입력 없이 · 전체화면으로</span></div>
+        <div class="hero-art" aria-hidden="true"><span class="art-spark one">✧</span><div class="timer-illustration"><div class="timer-top"></div><div class="clock-face"><span class="clock-dot d1"></span><span class="clock-dot d2"></span><span class="clock-dot d3"></span><span class="clock-dot d4"></span><span class="clock-hand"></span><strong>10:00</strong><small>잠깐, 쉬어 가요</small></div><div class="clock-feet"></div></div><span class="art-spark two">✧</span><span class="art-caption">TAKE A LITTLE BREAK</span></div>
+      </section>
+      <section class="collection" aria-labelledby="collection-title"><div class="section-top"><h2 id="collection-title">모든 웹앱 <span id="result-count">5</span></h2><label class="search"><span data-icon="search"></span><input id="search" type="search" placeholder="어떤 웹앱을 찾으세요?" aria-label="웹앱 검색"><kbd>/</kbd></label></div>
+        <div class="filter-row"><div class="filters" aria-label="웹앱 필터"><button class="chip selected" data-filter="all">전체</button><button class="chip" data-filter="classroom">교실 도구</button><button class="chip" data-filter="learning">학습과 소통</button><button class="chip" data-filter="play">놀이와 활동</button><button class="chip" data-filter="personal">개인 공간</button></div><span class="collection-note">하나씩, 차곡차곡 모았어요</span></div>
+        <div class="app-grid" id="apps"></div><p id="empty" class="empty" hidden>찾는 웹앱이 없어요. 검색어나 분류를 바꿔 보세요.</p>
+      </section>
+      <footer><span><span data-icon="drawer"></span>교실 서랍</span><p>필요한 도구를 꺼내고, 더 나은 하루를 만들어요.</p><button class="text-button" id="privacy">이 허브의 저장 방식</button></footer>
+    </main>
+  </div>
+</div>
+<section id="timer-view" hidden aria-labelledby="timer-heading">
+  <header class="timer-header"><a href="#home" class="button ghost"><span data-icon="back"></span>서랍으로</a><span class="timer-brand">교실 서랍 <span> / 쉬는시간</span></span><button class="button ghost" id="fullscreen"><span data-icon="expand"></span>전체화면</button></header>
+  <main class="timer-main"><span class="eyebrow">A LITTLE BREAK FOR EVERYONE</span><h1 id="timer-heading">지금은 쉬는 시간이에요</h1><p id="timer-message">물을 마시고, 몸을 쭉 펴고, 잠깐 쉬어 가요.</p>
+    <div class="timer-dial" id="timer-dial"><svg class="progress-ring" viewBox="0 0 400 400" aria-hidden="true"><circle class="ring-track" cx="200" cy="200" r="184"/><circle id="ring" cx="200" cy="200" r="184"/></svg><div class="time-display" id="time-display" role="timer" aria-label="남은 시간 10분">10:00</div><span class="timer-state" id="timer-state" role="status" aria-live="polite">준비되면 시작해요</span></div>
+    <div class="timer-controls"><button class="button primary start-button" id="toggle-timer"><span data-icon="play"></span><span id="toggle-label">시작하기</span></button><button class="button reset-button" id="reset-timer"><span data-icon="reset"></span>처음으로</button></div>
+    <div class="timer-settings"><div class="presets" aria-label="시간 빠른 설정"><button data-minutes="5">5분</button><button class="selected" data-minutes="10">10분</button><button data-minutes="15">15분</button><button data-minutes="20">20분</button></div><form id="custom-time"><label for="minutes">직접 설정</label><input id="minutes" type="number" min="1" max="180" step="1" value="10" required aria-label="타이머 시간, 분"><span>분</span><button class="button small" type="submit">적용</button></form><label class="sound-switch"><input id="sound" type="checkbox" checked><span data-icon="volume"></span>끝나면 알림음</label></div>
+    <div class="timer-bottom"><span class="status-dot"></span>나만의 속도로 쉬고, 함께 시작해요.<span class="shortcut">Space 시작·멈춤 <span>·</span> R 처음으로</span></div>
+  </main>
+</section>
+<dialog id="app-dialog"><form id="app-form"><div class="dialog-header"><h2>서랍에 웹앱 추가</h2><button class="icon-button" type="button" data-close aria-label="닫기">×</button></div><p>앱 이름과 주소만 넣으면 나만의 서랍에 추가돼요.<br>추가한 링크는 이 브라우저에만 저장해요.</p><label>웹앱 이름<input name="title" maxlength="60" required placeholder="예: 우리 반 뽑기"></label><label>웹앱 주소<input name="url" type="url" required placeholder="https://..."></label><label>한 줄 소개<input name="description" maxlength="180" placeholder="어떤 때 사용하는 앱인가요?"></label><label>분류<select name="category"><option value="classroom">교실 도구</option><option value="learning">학습과 소통</option><option value="play">놀이와 활동</option><option value="personal">개인 공간</option></select></label><p class="form-error" id="form-error" role="alert"></p><button type="submit" class="button primary">웹앱 추가하기 <span data-icon="plus"></span></button></form></dialog>
+<dialog id="info-dialog"><div class="dialog-header"><h2 id="info-title"></h2><button class="icon-button" data-close aria-label="닫기">×</button></div><div id="info-content"></div><button class="button primary" data-close>확인했어요</button></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script type="module" src="./app.mjs"></script>
+</body></html>
