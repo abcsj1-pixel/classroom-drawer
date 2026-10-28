@@ -1,0 +1,40 @@
+rules_version = '2';
+// Model: users/{uid}/entries/{entryId} only.
+// Required: date (valid YYYY-MM-DD), title (0..200 chars), body (1..100000,
+// non-whitespace), mood (enum), createdAt and updatedAt (server timestamps).
+// UID is authoritative in the path; no profiles, roles or public records.
+// createdAt is immutable. Queries are limited to 200 entries per page.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() { return request.auth != null; }
+    function isOwner(uid) { return isAuthenticated() && request.auth.uid == uid; }
+    function validDay(date) {
+      let parts = date.split('-');
+      let y = int(parts[0]);
+      let m = int(parts[1]);
+      let d = int(parts[2]);
+      let leap = y % 400 == 0 || (y % 4 == 0 && y % 100 != 0);
+      let days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      return date.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && y >= 100 && y <= 9999 && m >= 1 && m <= 12 && d >= 1 && d <= days[m - 1];
+    }
+    function isValidEntry(d) {
+      return d.keys().hasAll(['date','title','body','mood','createdAt','updatedAt'])
+        && d.keys().hasOnly(['date','title','body','mood','createdAt','updatedAt'])
+        && d.date is string && d.date.size() == 10 && validDay(d.date)
+        && d.title is string && d.title.size() <= 200
+        && d.body is string && d.body.size() >= 1 && d.body.size() <= 100000
+        && d.body.matches('(?s).*\\S.*')
+        && d.mood in ['', 'happy', 'calm', 'ordinary', 'sad', 'tired']
+        && d.createdAt is timestamp && d.updatedAt is timestamp
+        && d.updatedAt == request.time;
+    }
+    match /users/{uid}/entries/{entryId} {
+      allow get: if isOwner(uid);
+      allow list: if isOwner(uid) && request.query.limit != null && request.query.limit <= 200;
+      allow create: if isOwner(uid) && isValidEntry(request.resource.data) && request.resource.data.createdAt == request.time;
+      allow update: if isOwner(uid) && isValidEntry(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isOwner(uid);
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

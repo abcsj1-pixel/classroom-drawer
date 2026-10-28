@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.DS_Store
+.sites-local/
+node_modules/
+firebase-debug.log*
+firestore-debug.log*
+.firebase/
+.env*
+.audit-notes.md
+pages-output/
+.openai/
+.tooling/
+.publish/
+*service-account*.json
+*adminsdk*.json
+*.sqlite*
