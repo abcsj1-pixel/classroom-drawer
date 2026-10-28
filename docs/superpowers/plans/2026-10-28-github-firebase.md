@@ -57,3 +57,5 @@ Files: `dist/diary/`, `firestore.rules`, `firebase.json`, `tests/diary.test.mjs`
 - GitHub OAuth scopes do not include workflow. Use native branch-based Pages (`gh-pages`, `/`) instead of requiring expanded OAuth permissions. Active workflow file removed; source and static branch are separate.
 - General tests 11/11, rules emulator tests 7/7, independent code review completed. Offline-delete logout finding fixed and verified.
 - Public repository export excludes Sites metadata, original Git history, local diary data, credentials, debug logs and toolchain caches.
+- Source pushed to GitHub main and static assets to gh-pages; Pages deployment succeeded. Seven deployed core files match the reviewed artifacts. Anonymous production Firestore access denied with HTTP 403. OAuth launch endpoint returned 200.
+- Corrected actual Auth domain allowlist after CLI provider deployment silently ignored top-level authorizedDomains. User confirmed Google login reaches editor after correction. No real diary content migrated or used for tests.

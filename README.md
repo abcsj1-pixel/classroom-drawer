@@ -18,6 +18,8 @@ Firebase Authentication의 Google 로그인과 Cloud Firestore를 사용합니�
 
 Firestore 규칙 테스트: Java 21 이상과 Firebase CLI를 준비한 뒤 `npx -y firebase-tools@latest emulators:exec --only firestore --project demo-day-pieces "npm run test:rules"`. 실제 사용자 데이터는 사용하지 않습니다.
 
+다른 도메인으로 옮기면 Firebase Console → Authentication → Settings → Authorized domains에 해당 호스트를 추가해야 합니다. 이 배포에서는 `abcsj1-pixel.github.io`를 등록했습니다. Firebase CLI 15.34.1의 `deploy --only auth`는 제공자 설정을 배포하지만 최상위 `authorizedDomains` 항목은 적용하지 않으므로, 제공자 배포 성공만으로 도메인 등록이 끝났다고 판단하면 안 됩니다.
+
 ## 내 컴퓨터에서 실행
 
 `교실 서랍 시작.command`를 더블클릭합니다. Python 3가 필요합니다. 허브가 http://127.0.0.1:8780 에서 열립니다. 터미널을 종료하면 서버도 종료됩니다.
